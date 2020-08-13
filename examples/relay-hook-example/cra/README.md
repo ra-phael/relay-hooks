@@ -10,6 +10,5 @@ yarn
 
 ```
 yarn compile
-yarn server
 yarn start
 ```
