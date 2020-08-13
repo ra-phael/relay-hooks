@@ -3,13 +3,11 @@ import * as React from 'react';
 import { useQuery, RelayEnvironmentProvider } from 'relay-hooks';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
-import { create } from './mutations/create';
-
-import QueryApp from './query/QueryApp';
-import Entries from './components/Entries';
+import QueryPlanets from './query/QueryPlanets';
+import Planets from './components/Planets';
 
 async function fetchQuery(operation, variables) {
-    const response = await fetch('http://localhost:3003/graphql', {
+    const response = await fetch('https://swapi-graphql.netlify.app/.netlify/functions/index', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -28,26 +26,19 @@ const modernEnvironment = new Environment({
     store: new Store(new RecordSource()),
 });
 
-const AppTodo = (propsApp) => {
+const Main = (propsApp) => {
     const { props, error } = useQuery(
-        QueryApp,
-        {},
+        QueryPlanets,
+        { first: 4 },
         {
             fetchPolicy: 'store-or-network',
         },
-    ); /*propsApp; */
-    async function submitEntry() {
-        await create('try', modernEnvironment).catch(console.error);
-    }
+    );
 
-    console.log('renderer', props, propsApp);
-    if (props && props.entries) {
+    if (props && props.allPlanets) {
         return (
             <React.Fragment>
-                <button onClick={submitEntry} className="refetch">
-                    Add
-                </button>
-                <Entries entries={props.entries} />
+                <Planets allPlanets={props.allPlanets} />
             </React.Fragment>
         );
     } else if (error) {
@@ -59,7 +50,7 @@ const AppTodo = (propsApp) => {
 
 const App = (
     <RelayEnvironmentProvider environment={modernEnvironment}>
-        <AppTodo />
+        <Main />
     </RelayEnvironmentProvider>
 );
 
