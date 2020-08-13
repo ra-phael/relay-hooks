@@ -23,8 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "compile": "relay-compiler --src ./src/ --schema ./schema.gql",
-    "server": "node ./server/server.js"
+    "compile": "relay-compiler --src ./src/ --schema ./schema.gql"
   },
   "eslintConfig": {
     "extends": "react-app"
