@@ -6,6 +6,8 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import QueryPlanets from './query/QueryPlanets';
 import Planets from './components/Planets';
 
+let firstCall = true;
+
 async function fetchQuery(operation, variables) {
     const response = await fetch('https://swapi-graphql.netlify.app/.netlify/functions/index', {
         method: 'POST',
@@ -17,8 +19,17 @@ async function fetchQuery(operation, variables) {
             variables,
         }),
     });
+    const json = response.json();
+    return json.then((data) => {
+        let changedData = data;
 
-    return response.json();
+        if (!firstCall) {
+            changedData = data.data.allPlanets.edges.slice(0, 2);
+        }
+        firstCall = false;
+
+        return changedData;
+    });
 }
 
 const modernEnvironment = new Environment({

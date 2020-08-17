@@ -17,7 +17,7 @@ const fragmentSpec = graphql`
 const Planets = (props) => {
     const [liveContent, fetchLiveContent] = useRefetch(fragmentSpec, props.allPlanets);
 
-    const refreshVariables = { first: 10 };
+    const refreshVariables = { first: 4 };
     const refreshContent = () => {
         fetchLiveContent(QueryPlanets, refreshVariables, null, () => {}, { force: true });
     };
